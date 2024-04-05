@@ -9,7 +9,9 @@ from datetime import datetime
 from qwikidata.sparql import return_sparql_query_results
 
 scriptDir = os.path.dirname(os.path.abspath(__file__))
-redListEdition = '2023-1' # update manually
+versionResponse = requests.get('https://apiv3.iucnredlist.org/api/v3/version')
+versionResponse.raise_for_status()
+redListEdition = versionResponse.json()['version']
 
 with open('credentials.json') as f:
     credentials = json.load(f)
@@ -98,6 +100,7 @@ def editWikipedia(fullText, iucnInfo):
         # Replace the reference that was in the taxobox wherever it's used again, once.
         pattern = r'<ref name\s*=\s*"?' + referenceId + r'"?\s*\/\s*>'
         finalText = re.sub(pattern, fullReference, finalText, count=1)
+
     return finalText
 
 def main():
