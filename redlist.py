@@ -62,7 +62,9 @@ def editWikipedia(fullText, iucnInfo):
     statusRefIsNamedReference = False
     parsedWikitext = mwparserfromhell.parse(fullText)
     for template in parsedWikitext.filter_templates():
-        if template.name.matches('IUCN') and template.has('año') and (iucnInfo['assessment_date'][:4] in template.get('año').value):
+        if  template.name.matches('IUCN') and template.has('año') and ( \
+            (iucnInfo['assessment_date'][:4] in template.get('año').value) or \
+            (iucnInfo['published_year'] in template.get('año').value) ):
             return # Do nothing if last assessment date is the same as in the infobox reference, as it's up to date
     for template in parsedWikitext.filter_templates():
         if template.name.matches('Ficha de taxón'):
@@ -93,6 +95,7 @@ def editWikipedia(fullText, iucnInfo):
                 
     finalText = str(parsedWikitext)
     if statusRefIsNamedReference:
+        # Replace the reference that was in the taxobox wherever it's used again, once.
         pattern = r'<ref name\s*=\s*"?' + referenceId + r'"?\s*\/\s*>'
         finalText = re.sub(pattern, fullReference, finalText, count=1)
     return finalText

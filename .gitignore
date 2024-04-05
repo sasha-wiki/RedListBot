@@ -2,6 +2,7 @@ credentials.json
 data/
 tests/
 apicache/
+.git/
 throttle.ctrl
 cookies.txt
 user-config.py
