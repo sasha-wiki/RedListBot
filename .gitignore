@@ -1,0 +1,9 @@
+credentials.json
+data/
+tests/
+apicache/
+throttle.ctrl
+cookies.txt
+user-config.py
+pywikibot-Paquibot.lwp
+password.py
